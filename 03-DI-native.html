@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html  ng-app="myApp" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+</body>
+<script>
+   var app = {
+       controller: function(name, callback){
+           var $scope = function(){};
+           var $timeout = function(){};
+           var $interval = function(){};
+           var $injector = [$scope, $timeout, $interval];
+           var str = callback.toString();
+           var start = str.indexOf('(');
+           var end = str.indexOf(')');
+           str = str.slice(start+1, end);
+           console.log(str);
+           var arr = str.split(',');
+           for(var index in arr){
+               arr[index] = arr[index].trim();
+           }
+           var injector = [];
+           for(var index in $injector){
+               injector.push($injector[index].name);
+           }
+           var result =[];
+           for(var index in arr){
+               if(injector.indexOf(arr[index]) > -1)
+                   result.push($injector[index]);
+               else
+                throw new Error('injection error');
+           }
+
+           callback.apply(this, result);
+       }
+   }
+    app.controller('myController', function($timeout, $scope ){
+        console.log($scope, $timeout);
+    })
+</script>
+</html>

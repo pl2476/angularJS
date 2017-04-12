@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  .box {
+    width: 100px;
+    height: 100px;
+    margin: 100 auto;
+    background-color: #276;
+  }
+</style>
+
+<body>
+  <a href="#/music">music</a>
+  <a href="#/movie">movie</a>
+  <a href="#food">food</a>
+  <div class="box">
+
+  </div>
+</body>
+<script>
+  var getJson = function (url, callbcak) {
+    var client = new XMLHttpRequest();
+    client.open('GET', url);
+    client.responseType = 'json';
+    client.setRequestHeader('Accept', 'application/json');
+    client.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        return callbcak(this.response);
+      }
+    }
+    client.send();
+  }
+  location.href = '#/music';
+  window.addEventListener('hashchange', function () {
+    var hash = window.location.hash;
+
+    switch (hash) {
+      case '#/music':
+        getJson('./music.json', function (response) {
+          console.log(typeof response);
+          var box = document.querySelector('.box');
+          box.innerHTML = response.text;
+        })
+        break;
+      case '#/movie':
+        getJson('./movie.json', function (response) {
+          console.log(response);
+          var box = document.querySelector('.box');
+          box.innerHTML = response.text;
+        })
+        break;
+      case '#/my':
+        getJson('./my.json', function (response) {
+          console.log(response.text)
+          var box = document.querySelector('.box');
+          box.innerHTML = response.text;
+        })
+        break;
+    }
+  })
+</script>
+
+</html>
